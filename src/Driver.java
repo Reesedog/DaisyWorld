@@ -1,7 +1,8 @@
 public class Driver {
 
-    public void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Gaia gaia = new Gaia(10);
+        gaia.setUp();
         gaia.go();
     }
 }

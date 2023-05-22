@@ -1,8 +1,15 @@
 public class Patch {
 
     private double temperature;
-    private double albedo = ;
+    private double albedo = Params.SURFACE_ALBEDO;
     private Daisy daisy;
+    private boolean checkState;
+
+    Patch(){
+        this.temperature=0;
+        this.daisy = null;
+        this.checkState =false;
+    }
 
     public int updateSprout() {
         switch (daisy.checkSurvivability(temperature)) {
@@ -10,7 +17,8 @@ public class Patch {
                 return 1;             //sprout new flower
             case -1:
                 this.setToEmpty();    //remove flower
-                return 0;             // do nothing
+//                System.out.println("D");
+                return -1;             // do nothing
             default:
                 return 0;             //do nothing
         }
@@ -49,5 +57,25 @@ public class Patch {
 
     public void setDaisy(Daisy daisy) {
         this.daisy = daisy;
+    }
+
+    public Daisy getDaisy() {
+        return daisy;
+    }
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public boolean isCheckState() {
+        return checkState;
+    }
+
+    public void setCheckState(boolean checkState) {
+        this.checkState = checkState;
     }
 }

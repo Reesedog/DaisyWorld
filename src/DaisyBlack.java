@@ -1,6 +1,6 @@
 public class DaisyBlack extends Daisy{
     public DaisyBlack() {
-        super(0);
+        super(Params.BLACK_ALBEDO);
     }
 
     public Daisy createDaisy(){
