@@ -3,6 +3,10 @@ public class DaisyBlack extends Daisy{
         super(Params.BLACK_ALBEDO);
     }
 
+    public DaisyBlack(int age) {
+        super(Params.BLACK_ALBEDO, age);
+    }
+
     public Daisy createDaisy(){
         return new DaisyBlack();
     }

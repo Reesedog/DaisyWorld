@@ -18,7 +18,7 @@ public class Patch {
             case -1:
                 this.setToEmpty();    //remove flower
 //                System.out.println("D");
-                return -1;             // do nothing
+                return 0;             // do nothing
             default:
                 return 0;             //do nothing
         }
@@ -26,7 +26,6 @@ public class Patch {
 
     public void calcTemperature() {
         double luminosity = 0;
-
         double heat = 0;
 
         if (daisy != null) {

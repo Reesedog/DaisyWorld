@@ -2,6 +2,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class toCSV {
     public void writeArrayListToCSV(ArrayList<Double> data, String csvFilePath) {
         try (FileWriter writer = new FileWriter(csvFilePath)) {

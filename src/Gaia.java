@@ -51,11 +51,11 @@ public class Gaia {
             if (patches[x][y].getDaisy() == null) {
                 int temp = rand.nextInt(2);
                 if (temp == 0 && numWhitesCount > 0) {//white
-                    patches[x][y].setDaisy(new DaisyWhite());
+                    patches[x][y].setDaisy(new DaisyWhite(rand.nextInt(25)));
                     numWhitesCount--;
                 }
                 if (temp == 1 && numBlacksCount > 0) {//black
-                    patches[x][y].setDaisy(new DaisyBlack());
+                    patches[x][y].setDaisy(new DaisyBlack(rand.nextInt(25)));
                     numBlacksCount--;
                 }
             }
@@ -74,6 +74,7 @@ public class Gaia {
     }
 
     public void update() {
+        traverseMatrix();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 patches[i][j].calcTemperature();
@@ -103,14 +104,13 @@ public class Gaia {
                     // System.out.print(1 + " ");
                 }
                 if (tmp == -1) {
-                    //System.out.print(3 + " ");
+                    // System.out.print(3 + " ");
                 }
             }
             //System.out.println();
         }
 
         updateTemperature();
-        traverseMatrix();
     }
 
     public void updateTemperature() {//update global temperature
@@ -194,7 +194,7 @@ public class Gaia {
             patchCheck[xOffset][yOffset] = 1;
         }
         //no neighbor empty, renew itself
-        patches[x][y].setDaisy(patches[x][y].getDaisy().createDaisy());
+        //patches[x][y].setDaisy(patches[x][y].getDaisy().createDaisy());
 //        System.out.print("s ");
     }
 
@@ -212,7 +212,7 @@ public class Gaia {
                     System.out.print("E" + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
                     countWhite++;
-                    System.out.print("W" + " ");
+                    System.out.print(patches[i][j].getDaisy().getAge()+" ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
                     countBlack++;
                     System.out.print("B" + " ");

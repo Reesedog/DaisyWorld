@@ -9,6 +9,11 @@ public abstract class Daisy {
         this.age = 0;
     }
 
+    public Daisy(double albedo, int age) {
+        this.albedo = albedo;
+        this.age = age;
+    }
+
     public abstract Daisy createDaisy();
 
     public int checkSurvivability(double temperature) {
@@ -25,5 +30,9 @@ public abstract class Daisy {
 
     public double getAlbedo() {
         return albedo;
+    }
+
+    public int getAge() {
+        return age;
     }
 }
