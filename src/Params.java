@@ -12,10 +12,10 @@ public class Params {
 
     //Extension
 
-    public static final int PETALVORE_START = 10;
+    public static final int PETALVORE_START = 20;
 
-    public static final int PETALVORE_MAX_AGE = 20;
+    public static final int PETALVORE_MAX_AGE = 10;
 
-    public static final int PETALVORE_SPROUT_THRESHOLD = 20;
+    public static final int PETALVORE_SPROUT_THRESHOLD = 10;
 
 }

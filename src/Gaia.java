@@ -15,6 +15,11 @@ public class Gaia {
     //Extension
     private int numPetalvore;
 
+    private int tickCount;
+
+
+    //test variable
+    int deathCount;
 
     public Gaia(int size) {
         this.size = size;
@@ -35,7 +40,6 @@ public class Gaia {
         this.numPetalvore = Params.PETALVORE_START;
         startUpRandomDaisiesGenerator();
 
-        //traverseMatrix();
     }
 
     /**
@@ -69,10 +73,13 @@ public class Gaia {
     }
 
     public void go() throws InterruptedException {
-        while (true) {
+        while (tickCount < 1000) {
+            tickCount++;
             this.update();
-            Thread.sleep(100);
+            System.out.println("Tick : " + tickCount);
+            Thread.sleep(1);
         }
+        System.out.println(deathCount);
     }
 
     public void update() {
@@ -87,13 +94,12 @@ public class Gaia {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                //TODO for petalvore
+
                 if (patches[i][j].getDaisy() == null) {
                     //System.out.print(0 + " ");
                     continue;
                 }
 
-                //TODO checkState是什么
                 if (patches[i][j].isCheckState()) {
                     patches[i][j].setCheckState(false);
                     //System.out.print(1 + " ");
@@ -117,7 +123,7 @@ public class Gaia {
             //System.out.println();
         }
         traverseMatrix();
-        //petalvoreBehaviour();
+        petalvoreBehaviour();
 
     }
 
@@ -194,7 +200,9 @@ public class Gaia {
                 continue;
             }
             //sprout if selected patch empty
-            if (patches[x + xOffset - 1][y + yOffset - 1].getDaisy() == null) {
+            if (patches[x + xOffset - 1][y + yOffset - 1].getDaisy() == null
+                    && patches[x + xOffset - 1][y + yOffset - 1].getPetalvore() == null
+                    ) {
                 patches[x + xOffset - 1][y + yOffset - 1].setDaisy(patches[x][y].getDaisy().createDaisy());
                 patches[x + xOffset - 1][y + yOffset - 1].setCheckState(true);
 //                System.out.print("n ");
@@ -324,6 +332,9 @@ public class Gaia {
                     //if there is an alive petalvore
                     if(patches[i][j].getPetalvore().checkSurvivability()){
                         //first find daisy to eat
+                        if(patches[i][j].getPetalvore().getSatiety() > 15){
+                            continue;
+                        }
                         double patchTemperature = patches[i][j].getTemperature();
                         int diet = patches[i][j].getPetalvore().checkDiet(patchTemperature,globalTemperature);
 
@@ -339,28 +350,32 @@ public class Gaia {
                         patches[x][y].setPetalvore(patches[i][j].getPetalvore());
                         patches[x][y].getPetalvore().eat(5);
                         patches[i][j].removePetalvore();
-
+                        //System.out.println(patches[x][y].getPetalvore() == null);
                         //Petalvore try to sprout
-                        if(patches[x][y].petalvoreSprout()){
+                        if(patches[x][y].getPetalvore() != null && patches[x][y].getPetalvore().ableToSprout()){
+
+
                             //if there is no place to sprout
                             if(checkCoordinates(i,j,2)[0] < 0){
                                 continue;
                             }
-                            int xSprout = checkCoordinates(i,j,diet)[0];
-                            int ySprout = checkCoordinates(i,j,diet)[1];
+                            int xSprout = checkCoordinates(i,j,2)[0];
+                            int ySprout = checkCoordinates(i,j,2)[1];
                             patches[x][y].getPetalvore().sprout();
                             //if the target patch is null, sprout petalvore directly
                             if(patches[xSprout][ySprout].getDaisy() == null){
-                                patches[xSprout][ySprout].setPetalvore(new Petalvore(5));
+                                patches[xSprout][ySprout].setPetalvore(new Petalvore(10));
                             }
                             //if the target patch not null, remove the daisy then sprout petalvore
                             else {
                                 patches[xSprout][ySprout].setToEmpty();
-                                patches[xSprout][ySprout].setPetalvore(new Petalvore(5));
+                                patches[xSprout][ySprout].setPetalvore(new Petalvore(10));
                             }
                         }
                     }
                     //if checkSurvivability() is false, the petalvore is dead, remove it from the patch
+                    deathCount++;
+
                     patches[i][j].removePetalvore();
                 }
 
