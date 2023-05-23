@@ -1,5 +1,5 @@
 public class Params {
-    public final static double SOLAR_LUMINOSITY = 0.9;
+    public final static double SOLAR_LUMINOSITY = 0.8;
     public static final int MAX_AGE = 25;
 
     public static final double SURFACE_ALBEDO = 0.40;
@@ -10,5 +10,12 @@ public class Params {
     public static final double WHITE_ALBEDO = 0.75;
     public static final double BLACK_ALBEDO = 0.25;
 
+    //Extension
+
+    public static final int PETALVORE_START = 10;
+
+    public static final int PETALVORE_MAX_AGE = 20;
+
+    public static final int PETALVORE_SPROUT_THRESHOLD = 20;
 
 }

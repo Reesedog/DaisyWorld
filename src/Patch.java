@@ -5,10 +5,17 @@ public class Patch {
     private Daisy daisy;
     private boolean checkState;
 
-    Patch(){
-        this.temperature=0;
+    //Extension
+    private Petalvore petalvore;
+
+
+    Patch() {
+        this.temperature = 0;
         this.daisy = null;
-        this.checkState =false;
+        this.checkState = false;
+
+        //Extension
+        this.petalvore = null;
     }
 
     public int updateSprout() {
@@ -78,4 +85,31 @@ public class Patch {
     public void setCheckState(boolean checkState) {
         this.checkState = checkState;
     }
+
+
+    //Extension
+
+
+
+    public Petalvore getPetalvore() {
+        return petalvore;
+    }
+
+    public void setPetalvore(Petalvore petalvore) {
+        this.petalvore = petalvore;
+    }
+
+    public int checkDiet(int globalTemperature){
+        return petalvore.checkDiet(temperature, globalTemperature);
+    }
+
+    public void removePetalvore(){
+        this.petalvore = null;
+    }
+
+    public boolean petalvoreSprout(){
+        return petalvore.ableToSprout();
+    }
+
+
 }
