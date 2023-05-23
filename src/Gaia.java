@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Random;
@@ -12,18 +13,25 @@ public class Gaia {
     private String scenarioPhase;
     private Patch[][] patches;
 
+    private int tickCounts;
+
+    ArrayList<Double> luminosityList = new ArrayList<>();
+    ArrayList<Double> globalTemperatureList = new ArrayList<>();
+    ArrayList<Integer> whitePopulation = new ArrayList<>();
+    ArrayList<Integer> blackPopulation = new ArrayList<>();
+
     public Gaia(int size) {
         this.size = size;
         patches = new Patch[size][size];
-        for(int i=0;i<size;i++){
-            for (int j=0;j<size;j++)
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++)
                 patches[i][j] = new Patch();
 
         }
         this.globalTemperature = 0;
     }
 
-    public void setUp (){
+    public void setUp() {
         this.luminosity = Params.SOLAR_LUMINOSITY;
         this.numBlacks = Params.BLACK_START;
         this.numWhites = Params.WHITE_START;
@@ -32,21 +40,21 @@ public class Gaia {
 
     /**
      * initialize daisies
-     * */
-    public void startUpRandomDaisiesGenerator(){
+     */
+    public void startUpRandomDaisiesGenerator() {
         int numWhitesCount = this.numWhites;
         int numBlacksCount = this.numBlacks;
         Random rand = new Random();
-        while(numBlacksCount!=0||numWhitesCount!=0){
+        while (numBlacksCount != 0 || numWhitesCount != 0) {
             int x = rand.nextInt(size);
             int y = rand.nextInt(size);
-            if(patches[x][y].getDaisy()==null){
+            if (patches[x][y].getDaisy() == null) {
                 int temp = rand.nextInt(2);
-                if(temp==0&&numWhitesCount>0){//white
+                if (temp == 0 && numWhitesCount > 0) {//white
                     patches[x][y].setDaisy(new DaisyWhite());
                     numWhitesCount--;
                 }
-                if(temp==1&&numBlacksCount>0){//black
+                if (temp == 1 && numBlacksCount > 0) {//black
                     patches[x][y].setDaisy(new DaisyBlack());
                     numBlacksCount--;
                 }
@@ -56,10 +64,13 @@ public class Gaia {
 
 
     public void go() throws InterruptedException {
-        while (true) {
+        while (tickCounts <= 1000) {
+            tickCounts++;
             this.update();
-            Thread.sleep(100);
+            Thread.sleep(1);
+            System.out.println("ticks: " + tickCounts);
         }
+        toCSV();
     }
 
     public void update() {
@@ -73,32 +84,33 @@ public class Gaia {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (patches[i][j].getDaisy()==null){
-                    System.out.print(0 +" ");
+                if (patches[i][j].getDaisy() == null) {
+                    // System.out.print(0 + " ");
                     continue;
                 }
 
-                if(patches[i][j].isCheckState()){
+                if (patches[i][j].isCheckState()) {
                     patches[i][j].setCheckState(false);
-                    System.out.print(1 +" ");
+                    // System.out.print(1 + " ");
                     continue;
                 }
                 int tmp = patches[i][j].updateSprout();
                 if (tmp == 1) {
                     sprout(i, j);
-                    System.out.print("1 ");
+                    //System.out.print("1 ");
                 }
-                if (tmp == 0){
-                    System.out.print(1 +" ");
+                if (tmp == 0) {
+                    // System.out.print(1 + " ");
                 }
-                if (tmp == -1){
-                    System.out.print(3 +" ");
+                if (tmp == -1) {
+                    //System.out.print(3 + " ");
                 }
             }
-            System.out.println();
+            //System.out.println();
         }
 
         updateTemperature();
+        traverseMatrix();
     }
 
     public void updateTemperature() {//update global temperature
@@ -108,8 +120,9 @@ public class Gaia {
                 temp += patches[i][j].getTemperature();
             }
         }
-        this.globalTemperature = temp/(size*size);
+        this.globalTemperature = temp / (size * size);
         System.out.println(globalTemperature);
+        globalTemperatureList.add(globalTemperature);
     }
 
     public void diffuse() {
@@ -149,17 +162,17 @@ public class Gaia {
     public void sprout(int x, int y) {
         boolean allNeighborFlag = false;
         int[][] patchCheck = new int[3][3];
-        for(int i=0;i<3;i++){
-            for (int j=0;j<3;j++){
-                patchCheck[i][j]=0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                patchCheck[i][j] = 0;
             }
         }
         Random rand = new Random();
-        while(!allNeighborFlag){
+        while (!allNeighborFlag) {
             allNeighborFlag = true;
-            for(int i=0;i<3;i++){
-                for (int j=0;j<3;j++){
-                    if(patchCheck[i][j]==0)
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (patchCheck[i][j] == 0)
                         allNeighborFlag = false;
                 }
             }
@@ -167,14 +180,14 @@ public class Gaia {
             int yOffset = rand.nextInt(3);
             if (patchCheck[xOffset][yOffset] == 1)
                 continue;
-            if(x+xOffset-1<0||x+xOffset-1>=size||y+yOffset-1<0||y+yOffset-1>=size){
+            if (x + xOffset - 1 < 0 || x + xOffset - 1 >= size || y + yOffset - 1 < 0 || y + yOffset - 1 >= size) {
                 patchCheck[xOffset][yOffset] = 1;
                 continue;
             }
             //sprout if selected patch empty
-            if(patches[x+xOffset-1][y+yOffset-1].getDaisy()==null){
-                patches[x+xOffset-1][y+yOffset-1].setDaisy(patches[x][y].getDaisy().createDaisy());
-                patches[x+xOffset-1][y+yOffset-1].setCheckState(true);
+            if (patches[x + xOffset - 1][y + yOffset - 1].getDaisy() == null) {
+                patches[x + xOffset - 1][y + yOffset - 1].setDaisy(patches[x][y].getDaisy().createDaisy());
+                patches[x + xOffset - 1][y + yOffset - 1].setCheckState(true);
 //                System.out.print("n ");
                 return;
             }
@@ -183,5 +196,52 @@ public class Gaia {
         //no neighbor empty, renew itself
         patches[x][y].setDaisy(patches[x][y].getDaisy().createDaisy());
 //        System.out.print("s ");
+    }
+
+
+    public void traverseMatrix() {
+        //Data summary
+        int countWhite = 0;
+        int countBlack = 0;
+        int countPetalvore = 0;
+        int countEmpty = 0;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (patches[i][j].getDaisy() == null) {
+                    countEmpty++;
+                    System.out.print("E" + " ");
+                } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
+                    countWhite++;
+                    System.out.print("W" + " ");
+                } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
+                    countBlack++;
+                    System.out.print("B" + " ");
+                }
+            }
+            System.out.println();
+        }
+        whitePopulation.add(countWhite);
+        blackPopulation.add(countBlack);
+        System.out.println("Empty Patch : " + countEmpty + "\n" +
+                "Black Daisy: " + countBlack + "\n" +
+                "White Daisy : " + countWhite + "\n" +
+                "Petalvore : " + countPetalvore);
+        System.out.println(whitePopulation.size() + " " + blackPopulation.size());
+    }
+
+
+    //    ArrayList<Double> luminosityList = new ArrayList<>();
+//    ArrayList<Double> globalTemperatureList = new ArrayList<>();
+//    ArrayList<Integer> whitePopulation = new ArrayList<>();
+//    ArrayList<Integer> blackPopulation = new ArrayList<>();
+
+
+    public void toCSV() {
+
+        toCSV t = new toCSV();
+        t.writeArrayListToCSV(luminosityList,"luminosity.csv");
+        t.writeArrayListToCSV(globalTemperatureList,"globalTemperature.csv");
+        t.writeArrayListToCSV2(whitePopulation,"whitePopulation.csv");
+        t.writeArrayListToCSV2(blackPopulation,"blackPopulation.csv");
     }
 }
