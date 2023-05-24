@@ -235,13 +235,9 @@ public class Gaia {
 //    ArrayList<Integer> whitePopulation = new ArrayList<>();
 //    ArrayList<Integer> blackPopulation = new ArrayList<>();
 
-
     public void toCSV() {
-
         toCSV t = new toCSV();
-        t.writeArrayListToCSV(luminosityList,"luminosity.csv");
-        t.writeArrayListToCSV(globalTemperatureList,"globalTemperature.csv");
-        t.writeArrayListToCSV2(whitePopulation,"whitePopulation.csv");
-        t.writeArrayListToCSV2(blackPopulation,"blackPopulation.csv");
+        t.writeArrayListsToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "over_overallData9.csv");
+//        t.writeAveragesToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "avg_overallData3.csv");
     }
 }
