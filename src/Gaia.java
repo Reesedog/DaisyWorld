@@ -59,10 +59,10 @@ public class Gaia {
                 //Extension increase flag bound to 3
                 int flag = rand.nextInt(3);
                 if (flag == 0 && numWhitesCount > 0) {//white
-                    patches[x][y].setDaisy(new DaisyWhite());
+                    patches[x][y].setDaisy(new DaisyWhite(rand.nextInt(25)));
                     numWhitesCount--;
                 } else if (flag == 1 && numBlacksCount > 0) {//black
-                    patches[x][y].setDaisy(new DaisyBlack());
+                    patches[x][y].setDaisy(new DaisyBlack(rand.nextInt(25)));
                     numBlacksCount--;
                 } else if (flag == 2 && numPetalvoreCount > 0) {//Petalvore
                     patches[x][y].setPetalvore(new Petalvore(10));
@@ -73,7 +73,7 @@ public class Gaia {
     }
 
     public void go() throws InterruptedException {
-        while (tickCount < 1000) {
+        while (tickCount < 3000) {
             tickCount++;
             this.update();
             System.out.println("Tick : " + tickCount);
@@ -86,6 +86,7 @@ public class Gaia {
         //Update temperature of each patch and global temperature
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
+
                 patches[i][j].calcTemperature();
             }
         }
@@ -211,7 +212,7 @@ public class Gaia {
             patchCheck[xOffset][yOffset] = 1;
         }
         //no neighbor empty, renew itself
-        patches[x][y].setDaisy(patches[x][y].getDaisy().createDaisy());
+//        patches[x][y].setDaisy(patches[x][y].getDaisy().createDaisy());
 //        System.out.print("s ");
     }
 
@@ -230,7 +231,6 @@ public class Gaia {
         for (int[] offset : offsets) {
             int targetX = x + offset[0];
             int targetY = y + offset[1];
-
             //Check if there is Index out of boundary
             if (targetX >= 0 && targetX < size && targetY >= 0 && targetY < size) {
                 //command == 1: find black daisy to eat
@@ -248,6 +248,12 @@ public class Gaia {
                         targetList.add(coordinates);
                     }
                 }
+//                if(command == 0){
+//                    if(patches[targetX][targetY].getDaisy() != null){
+//                        int[] coordinates = new int[]{targetX, targetY};
+//                        targetList.add(coordinates);
+//                    }
+//                }
                 //command == 2 : find a place to sprout
                 else if (command == 2) {
                     //find an empty patch without petalvore
@@ -296,14 +302,14 @@ public class Gaia {
                         System.out.print("P" + " ");
                     } else {
                         countEmpty++;
-                        System.out.print("E" + " ");
+                        System.out.print(" " + " ");
                     }
                 } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
                     countWhite++;
-                    System.out.print("W" + " ");
+                    System.out.print(Double.parseDouble(String.format("%.2f", patches[i][j].getDaisy().getAlbedo())) + " " + "W" + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
                     countBlack++;
-                    System.out.print("B" + " ");
+                    System.out.print(Double.parseDouble(String.format("%.2f", patches[i][j].getDaisy().getAlbedo())) + " " + "B" + " ");
                 }
             }
             System.out.println();
@@ -335,6 +341,7 @@ public class Gaia {
                         if(patches[i][j].getPetalvore().getSatiety() > 15){
                             continue;
                         }
+
                         double patchTemperature = patches[i][j].getTemperature();
                         int diet = patches[i][j].getPetalvore().checkDiet(patchTemperature,globalTemperature);
 
@@ -348,13 +355,12 @@ public class Gaia {
                         //Remove the daisy and move petalvore to there
                         patches[x][y].setToEmpty();
                         patches[x][y].setPetalvore(patches[i][j].getPetalvore());
-                        patches[x][y].getPetalvore().eat(5);
+                        if(patches[x][y].getPetalvore().getSatiety()<=0){
+                        patches[x][y].getPetalvore().eat(25);}
                         patches[i][j].removePetalvore();
                         //System.out.println(patches[x][y].getPetalvore() == null);
                         //Petalvore try to sprout
                         if(patches[x][y].getPetalvore() != null && patches[x][y].getPetalvore().ableToSprout()){
-
-
                             //if there is no place to sprout
                             if(checkCoordinates(i,j,2)[0] < 0){
                                 continue;

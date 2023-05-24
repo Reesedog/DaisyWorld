@@ -5,11 +5,13 @@ public class Petalvore {
     private int diet;
     private int satiety;
 
+    private int token = 0;
+
     public Petalvore(){
     }
 
     public Petalvore(int satiety){
-        this.satiety = satiety;
+        this.satiety = 0;
     }
 
     /**
@@ -21,7 +23,7 @@ public class Petalvore {
     public boolean checkSurvivability() {
         age = age + 1;
         satiety = satiety - 1;
-        if(age >= Params.PETALVORE_MAX_AGE || satiety <= 0){
+        if(age >= Params.PETALVORE_MAX_AGE){
             return false;
         }
         return true;
@@ -44,7 +46,7 @@ public class Petalvore {
      * @return true: able to sprout;  false: not able to sprout.
      * */
     public boolean ableToSprout(){
-        if(satiety >= Params.PETALVORE_SPROUT_THRESHOLD){
+        if(token >= 2){
             return true;
         }
         return false;
@@ -71,10 +73,11 @@ public class Petalvore {
     }
 
     public void eat(int daisy) {
-        this.satiety = satiety + daisy;
+        this.satiety = satiety + 75;
+        token ++;
     }
 
     public void sprout(){
-        this.satiety = satiety / 2;
+        this.satiety = satiety;
     }
 }

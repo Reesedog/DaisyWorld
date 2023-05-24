@@ -10,7 +10,7 @@ public class Patch {
 
 
     Patch() {
-        this.temperature = 0;
+        this.temperature = 22.5;
         this.daisy = null;
         this.checkState = false;
 
@@ -35,6 +35,11 @@ public class Patch {
         double luminosity = 0;
 
         double heat = 0;
+
+        if(petalvore != null){
+            temperature = 65;
+            return;
+        }
 
         if (daisy != null) {
             luminosity = (1 - daisy.getAlbedo()) * Params.SOLAR_LUMINOSITY;

@@ -1,0 +1,52 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+
+
+
+Patch -- "1 " Daisy
+
+Gaia -- "size*size " Patch
+
+
+
+class Daisy{
+    -  maxAge: int
+    -  age: int
+    -  albedo: double
+    +  checkSurvivability(temperature: double): int
+}
+
+class DaisyWhite extends Daisy
+
+class DaisyBlack extends Daisy
+
+class Patch{
+    -   temperature: double
+    -   albedo: double
+    -   daisy: Daisy
+
+    +  updateSproutDeath(): int
+    +  calcTemperature(): void
+    +  setToEmpty(): void
+    +  setToBlack(): void
+    +  setToWhite(): void
+}
+
+class Gaia {
+    -  luminosity: int
+    -  size: int
+    -  globalTemperature: double
+    -  numBlacks: int
+    -  numWhites: int
+    -  scenarioPhase: String
+
+    +  go(): void
+    +  update(): void
+    +  updateTemperature(): void
+    +  diffuse(): void
+    +  sprout(x: int, y: int): void
+    }
+
+@enduml

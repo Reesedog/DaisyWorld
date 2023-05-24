@@ -1,21 +1,21 @@
 public class Params {
-    public final static double SOLAR_LUMINOSITY = 0.8;
+    public final static double SOLAR_LUMINOSITY = 0.48;
     public static final int MAX_AGE = 25;
 
     public static final double SURFACE_ALBEDO = 0.40;
 
-    public static final int WHITE_START = 20;
-    public static final int BLACK_START = 20;
+    public static final int WHITE_START = 1000;
+    public static final int BLACK_START = 1000;
 
     public static final double WHITE_ALBEDO = 0.75;
     public static final double BLACK_ALBEDO = 0.25;
 
     //Extension
 
-    public static final int PETALVORE_START = 20;
+    public static final int PETALVORE_START = 0;
 
-    public static final int PETALVORE_MAX_AGE = 10;
+    public static final int PETALVORE_MAX_AGE = 200;
 
-    public static final int PETALVORE_SPROUT_THRESHOLD = 10;
+    public static final int PETALVORE_SPROUT_THRESHOLD = 75;
 
 }
