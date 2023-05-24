@@ -1,5 +1,5 @@
 public class Params {
-    public final static double SOLAR_LUMINOSITY = 0.8;
+    public final static double SOLAR_LUMINOSITY = 1.4;
     public static final int MAX_AGE = 25;
 
     public static final double SURFACE_ALBEDO = 0.40;

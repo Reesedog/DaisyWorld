@@ -209,10 +209,10 @@ public class Gaia {
             for (int j = 0; j < size; j++) {
                 if (patches[i][j].getDaisy() == null) {
                     countEmpty++;
-                    System.out.print("E" + " ");
+                    System.out.print(" " + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
                     countWhite++;
-                    System.out.print(patches[i][j].getDaisy().getAge()+" ");
+                    System.out.print("W" + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
                     countBlack++;
                     System.out.print("B" + " ");
