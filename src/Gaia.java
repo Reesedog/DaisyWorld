@@ -86,7 +86,6 @@ public class Gaia {
         //Update temperature of each patch and global temperature
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-
                 patches[i][j].calcTemperature();
             }
         }
@@ -306,10 +305,10 @@ public class Gaia {
                     }
                 } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
                     countWhite++;
-                    System.out.print(Double.parseDouble(String.format("%.2f", patches[i][j].getDaisy().getAlbedo())) + " " + "W" + " ");
+                    System.out.print(String.format("%.2f", patches[i][j].getDaisy().getAlbedo() )+ " " + "W" + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
                     countBlack++;
-                    System.out.print(Double.parseDouble(String.format("%.2f", patches[i][j].getDaisy().getAlbedo())) + " " + "B" + " ");
+                    System.out.print(String.format("%.2f", patches[i][j].getDaisy().getAlbedo()) + " " + "B" + " ");
                 }
             }
             System.out.println();

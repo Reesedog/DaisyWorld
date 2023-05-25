@@ -1,15 +1,23 @@
 import java.util.Random;
 
-public class DaisyBlack extends Daisy{
+public class DaisyBlack extends Daisy {
     private static Random random = new Random();
+
     public DaisyBlack() {
-        super(Params.BLACK_ALBEDO + random.nextDouble() * 1.2 - 0.6);
+        super(Params.BLACK_ALBEDO);//+ random.nextDouble() * 1.2 - 0.6);
+    }
+
+    public DaisyBlack(double alb) {
+        super(alb);
     }
 
     public DaisyBlack(int age) {
         super(Params.BLACK_ALBEDO, age);
     }
-    public Daisy createDaisy(){
-        return new DaisyBlack();
+
+    public Daisy createDaisy() {
+        return new DaisyBlack(this.getAlbedo() + random.nextDouble() * 1.2 - 0.6);
     }
+
+
 }

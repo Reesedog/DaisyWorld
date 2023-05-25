@@ -10,7 +10,7 @@ public class Patch {
 
 
     Patch() {
-        this.temperature = 22.5;
+        this.temperature = 0;
         this.daisy = null;
         this.checkState = false;
 
