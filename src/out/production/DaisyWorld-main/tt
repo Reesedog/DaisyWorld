@@ -1,0 +1,100 @@
+
+//    public void newSprout(int x, int y) {
+//        int targetX = -1;
+//        int targetY = -1;
+//        targetX = checkCoordinates(x, y)[0];
+//        targetY = checkCoordinates(x, y)[1];
+//        if (targetX >= 0 && targetY >= 0) {
+//            if (patches[x][y].getDaisy() instanceof DaisyWhite) {
+//                patches[targetX][targetY].setDaisy(patches[x][y].getDaisy().createDaisy());
+//            } else if (patches[x][y].getDaisy() instanceof DaisyBlack) {
+//                patches[targetX][targetY].setDaisy(patches[x][y].getDaisy().createDaisy());
+//            }
+//        }
+//    }
+//
+//    public int[] checkCoordinates(int i, int j) {
+//        int x = (findTargetPatch(checkAround(i, j)))[0];
+//        int y = (findTargetPatch(checkAround(i, j)))[1];
+//        //x == -1 && y == -1 means : there is no daisy to eat
+//        if (x == -1 && y == -1) {
+//            return new int[]{-1, -1};
+//        }
+//        return new int[]{x, y};
+//    }
+//
+//    public ArrayList<int[]> checkAround(int x, int y) {
+//        ArrayList<int[]> targetList = new ArrayList<>();
+//        if (x < 0 || x >= size || y < 0 || y >= size) {
+//            throw new IllegalArgumentException("Error Coordinates!");
+//        }
+//        //search 3*3 matrix around the (curX,curY)
+//        int[][] offsets = {
+//                {-1, -1}, {-1, 0}, {-1, 1},
+//                {0, -1}, {0, 1},
+//                {1, -1}, {1, 0}, {1, 1}
+//        };
+//        for (int[] offset : offsets) {
+//            int targetX = x + offset[0];
+//            int targetY = y + offset[1];
+//            //Check if there is Index out of boundary
+//            if (targetX >= 0 && targetX < size && targetY >= 0 && targetY < size) {
+//                if (patches[targetX][targetY].getDaisy() == null) {
+//                    int[] coordinates = new int[]{targetX, targetY};
+//                    targetList.add(coordinates);
+//                }
+//            }
+//        }
+//
+//        return targetList;
+//    }
+//
+//    public int[] findTargetPatch(ArrayList<int[]> targetList) {
+//        int length = targetList.size();
+//        //No target coordinates in the list
+//        if (length == 0) {
+//            return new int[]{-1, -1};
+//        } else {
+//            Random random = new Random();
+//            int randomIndex = random.nextInt(length);
+//            return targetList.get(randomIndex);
+//        }
+//    }
+
+
+//    public void traverseMatrix() {
+//        //Data summary
+//        int countWhite = 0;
+//        int countBlack = 0;
+//        int countPetalvore = 0;
+//        int countEmpty = 0;
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                if (patches[i][j].getDaisy() == null) {
+//                    countEmpty++;
+//                    System.out.print(" " + " ");
+//                } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
+//                    countWhite++;
+//                    System.out.print("W" + " ");
+//                } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
+//                    countBlack++;
+//                    System.out.print("B" + " ");
+//                }
+//            }
+//            System.out.println();
+//        }
+//        whitePopulation.add(countWhite);
+//        blackPopulation.add(countBlack);
+//        System.out.println("Empty Patch : " + countEmpty + "\n" +
+//                "Black Daisy: " + countBlack + "\n" +
+//                "White Daisy : " + countWhite + "\n" +
+//                "Petalvore : " + countPetalvore);
+//        System.out.println(whitePopulation.size() + " " + blackPopulation.size());
+//    }
+
+
+//    public void toCSV() {
+//        toCSV t = new toCSV();
+//        t.writeArrayListsToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "ndata/test001.csv");
+////        t.writeAveragesToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "avg_overallData3.csv");
+//    }

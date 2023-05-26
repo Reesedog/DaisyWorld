@@ -1,9 +1,7 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Random;
+import java.util.*;
 
 public class Gaia {
+
     private double luminosity;
     private int size;
     private int maxAge;
@@ -32,11 +30,15 @@ public class Gaia {
     }
 
     public void setUp() {
+
         this.luminosity = Params.SOLAR_LUMINOSITY;
+//        System.out.println(luminosity);
         this.numBlacks = Params.BLACK_START;
         this.numWhites = Params.WHITE_START;
         startUpRandomDaisiesGenerator();
     }
+
+
 
     /**
      * initialize daisies
@@ -64,12 +66,13 @@ public class Gaia {
 
 
     public void go() throws InterruptedException {
-        while (tickCounts <= 1000) {
+        while (tickCounts <= Params.TICKS) {
             tickCounts++;
             this.update();
             Thread.sleep(1);
-            System.out.println("ticks: " + tickCounts);
+            //System.out.println("ticks: " + tickCounts);
         }
+
         toCSV();
     }
 
@@ -77,7 +80,7 @@ public class Gaia {
         traverseMatrix();
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                patches[i][j].calcTemperature();
+                patches[i][j].calcTemperature(luminosity);
             }
         }
 
@@ -86,30 +89,36 @@ public class Gaia {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 if (patches[i][j].getDaisy() == null) {
-                    // System.out.print(0 + " ");
                     continue;
                 }
 
                 if (patches[i][j].isCheckState()) {
                     patches[i][j].setCheckState(false);
-                    // System.out.print(1 + " ");
                     continue;
                 }
                 int tmp = patches[i][j].updateSprout();
                 if (tmp == 1) {
                     sprout(i, j);
-                    //System.out.print("1 ");
                 }
                 if (tmp == 0) {
-                    // System.out.print(1 + " ");
                 }
                 if (tmp == -1) {
-                    // System.out.print(3 + " ");
                 }
             }
-            //System.out.println();
         }
 
+        if (Params.SCENARIO.equals("ramp-up-ramp-down")) {
+            if (tickCounts > 200 && tickCounts <= 400) {
+                double precision = 0.005;
+                double newSolarLuminosity = luminosity + precision;
+                luminosity = Math.round(newSolarLuminosity * 10000.0) / 10000.0; // Rounding to 4 decimal places
+            }
+            if (tickCounts > 600 && tickCounts <= 850) {
+                double precision = 0.0025;
+                double newSolarLuminosity = luminosity - precision;
+                luminosity = Math.round(newSolarLuminosity * 10000.0) / 10000.0; // Rounding to 4 decimal places
+            }
+        }
         updateTemperature();
     }
 
@@ -121,8 +130,9 @@ public class Gaia {
             }
         }
         this.globalTemperature = temp / (size * size);
-        System.out.println(globalTemperature);
+        //System.out.println(globalTemperature);
         globalTemperatureList.add(globalTemperature);
+        luminosityList.add(luminosity);
     }
 
     public void diffuse() {
@@ -136,6 +146,9 @@ public class Gaia {
 
                 for (int di = -1; di <= 1; di++) {
                     for (int dj = -1; dj <= 1; dj++) {
+                        if (di == 0 && dj == 0) {
+                            continue;
+                        }
                         int ni = i + di;
                         int nj = j + dj;
                         if (ni >= 0 && ni < size && nj >= 0 && nj < size) {
@@ -144,13 +157,11 @@ public class Gaia {
                         }
                     }
                 }
-
                 newTemperature = newTemperature / count;
                 updatedPatches[i][j] = new Patch();
                 updatedPatches[i][j].setTemperature(0.5 * newTemperature + 0.5 * patches[i][j].getTemperature());
             }
         }
-
         // Update the grid
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -188,14 +199,10 @@ public class Gaia {
             if (patches[x + xOffset - 1][y + yOffset - 1].getDaisy() == null) {
                 patches[x + xOffset - 1][y + yOffset - 1].setDaisy(patches[x][y].getDaisy().createDaisy());
                 patches[x + xOffset - 1][y + yOffset - 1].setCheckState(true);
-//                System.out.print("n ");
                 return;
             }
             patchCheck[xOffset][yOffset] = 1;
         }
-        //no neighbor empty, renew itself
-        //patches[x][y].setDaisy(patches[x][y].getDaisy().createDaisy());
-//        System.out.print("s ");
     }
 
 
@@ -209,35 +216,28 @@ public class Gaia {
             for (int j = 0; j < size; j++) {
                 if (patches[i][j].getDaisy() == null) {
                     countEmpty++;
-                    System.out.print(" " + " ");
+                    //System.out.print(" " + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyWhite) {
                     countWhite++;
-                    System.out.print("W" + " ");
+                    //System.out.print("W" + " ");
                 } else if (patches[i][j].getDaisy() instanceof DaisyBlack) {
                     countBlack++;
-                    System.out.print("B" + " ");
+                    //System.out.print("B" + " ");
                 }
             }
-            System.out.println();
+//            System.out.println();
         }
         whitePopulation.add(countWhite);
         blackPopulation.add(countBlack);
-        System.out.println("Empty Patch : " + countEmpty + "\n" +
-                "Black Daisy: " + countBlack + "\n" +
-                "White Daisy : " + countWhite + "\n" +
-                "Petalvore : " + countPetalvore);
-        System.out.println(whitePopulation.size() + " " + blackPopulation.size());
+//        System.out.println("Empty Patch : " + countEmpty + "\n" +
+//                "Black Daisy: " + countBlack + "\n" +
+//                "White Daisy : " + countWhite);
     }
-
-
-    //    ArrayList<Double> luminosityList = new ArrayList<>();
-//    ArrayList<Double> globalTemperatureList = new ArrayList<>();
-//    ArrayList<Integer> whitePopulation = new ArrayList<>();
-//    ArrayList<Integer> blackPopulation = new ArrayList<>();
-
     public void toCSV() {
         toCSV t = new toCSV();
-        t.writeArrayListsToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "over_overallData9.csv");
+        t.writeArrayListsToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "result.csv");
 //        t.writeAveragesToCSV(luminosityList, globalTemperatureList, whitePopulation, blackPopulation, "avg_overallData3.csv");
+
     }
+
 }

@@ -6,7 +6,7 @@ public class Patch {
     private boolean checkState;
 
     Patch(){
-        this.temperature=0;
+        this.temperature = 0;
         this.daisy = null;
         this.checkState =false;
     }
@@ -24,14 +24,17 @@ public class Patch {
         }
     }
 
-    public void calcTemperature() {
-        double luminosity = 0;
+    public void calcTemperature(double luminosity) {
+        //double luminosity = 0;
+
         double heat = 0;
 
         if (daisy != null) {
-            luminosity = (1 - daisy.getAlbedo()) * Params.SOLAR_LUMINOSITY;
+            luminosity = (1 - daisy.getAlbedo()) * luminosity;
+            //luminosity = (1 - daisy.getAlbedo()) * Params.SOLAR_LUMINOSITY;
         } else {
-            luminosity = (1 - this.albedo) * Params.SOLAR_LUMINOSITY;
+//            luminosity = (1 - this.albedo) * Params.SOLAR_LUMINOSITY;
+            luminosity = (1 - this.albedo) * luminosity;
         }
 
         if (luminosity > 0) {
